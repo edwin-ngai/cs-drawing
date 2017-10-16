@@ -1,6 +1,5 @@
 # cs-drawing
 This is a simple console version of a drawing program.
-
 At this time, the functionality of the program is quire limited but this might change in the future. 
 In a nutshell, the program should work as follows:
  1. Create a new canvas
@@ -8,7 +7,7 @@ In a nutshell, the program should work as follows:
  3. Quit
 
 
-Command 		Description
+Command 		      Description
 C w h           Should create a new canvas of width w and height h.
 L x1 y1 x2 y2   Should create a new line from (x1,y1) to (x2,y2). Currently only
                 horizontal or vertical lines are supported. Horizontal and vertical lines
