@@ -25,6 +25,7 @@ public final class CommandContext {
 	private static final String COMMAND_DRAW_LINE = "L";
 	private static final String COMMAND_DRAW_RECTANGLE = "R";
 	private static final String COMMAND_BUCKET_FILL = "B";
+	private static final String COMMAND_HELP = "H";
 
 	
 	private Canvas canvas;
@@ -76,7 +77,9 @@ public final class CommandContext {
 				arguments = Arrays.copyOfRange(commandAndArguments, 1, commandAndArguments.length);
 			}
 			try {
-				if (COMMAND_QUIT.equals(command)) {
+				if (COMMAND_HELP.equals(command)) {
+					result = new Help(this);
+				}else if (COMMAND_QUIT.equals(command)) {
 					result = new Quit(this);
 				}else if (COMMAND_CREATE_CANVAS.equals(command)) {
 					result = new CreateCanvas(arguments, this);
