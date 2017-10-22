@@ -8,18 +8,20 @@ package io.drawing.util;
  *
  */
 public final class Constant {
+	
+	public static final int MIN_CANVAS_SIZE = 1;
+	public static final int MAX_CANVAS_SIZE = 999;
+	
+	public static final String CONTEXT_IS_NULL = "Context is null.";
+	public static final String CANVAS_IS_NULL = "Canvas is null. It might not be created yet.";
+	public static final String INSUFFICIENT_ARGUMENT = "Insufficient arguments. Expected %d arguments";
+	public static final String INVALID_COMMAND = "Invalid command. Please try again!\n";
 
-	public static final char DEFAULT_COLOR = 'x';
-	public static final char TRANSPARENT_COLOR = ' ';
-	
-	public static final String COMMAND_QUIT = "Q";
-	public static final String COMMAND_CREATE_CANVAS = "C";
-	public static final String COMMAND_DRAW_LINE = "L";
-	public static final String COMMAND_DRAW_RECTANGLE = "R";
-	public static final String COMMAND_BUCKET_FILL = "B";
-	
-	public static final String WIDTH = "width";
-	public static final String HEIGHT = "height";
+	public static final String INVALID_ARGUMENT = "Invalid argument [%s].";
+	public static final String ARGUMENT_NOT_FOUND = "Argument is not found.";
+	public static final String ARGUMENT_NOT_NUMERIC = "Argument [%s] is not numeric.";
+	public static final String ARGUMENT_OUT_OF_RANGE = "Argument [%s] is out of range. Expected: argument = [%d, %d].";
+
 	
 	private Constant() {
 		

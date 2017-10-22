@@ -3,58 +3,59 @@
  */
 package io.drawing.command;
 
+import static io.drawing.util.Constant.ARGUMENT_NOT_FOUND;
+import static io.drawing.util.Constant.ARGUMENT_NOT_NUMERIC;
+import static io.drawing.util.Constant.ARGUMENT_OUT_OF_RANGE;
+import static io.drawing.util.Constant.INSUFFICIENT_ARGUMENT;
+import static io.drawing.util.Constant.MAX_CANVAS_SIZE;
+import static io.drawing.util.Constant.MIN_CANVAS_SIZE;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import io.drawing.shape.Canvas;
-import static io.drawing.util.Constant.*;
+import io.drawing.util.Utils;
 
 /**
  * @author Edwin Ngai (edwin.ngai@mail.con)
  *
  */
-public class CreateCanvas implements Command {
+public class CreateCanvas extends RenderingCommand {
 
-	private int width, height;
+	private int width;
+	private int height;
 
-	public CreateCanvas(int width, int height) {
-		this.setWidth(width);
-		this.setHeight(height);
+	public CreateCanvas(String[] arguments, CommandContext context) {
+		
+		super(context);
+		Validate.notNull(arguments, ARGUMENT_NOT_FOUND);
+		Validate.isTrue(arguments.length>=2, INSUFFICIENT_ARGUMENT, 2);
+		for (String arg : arguments) {
+			Validate.isTrue(StringUtils.isNumeric(arg), ARGUMENT_NOT_NUMERIC, arg);
+			//maximum canvas size is 999
+			Validate.isTrue(arg.length()<=3, ARGUMENT_OUT_OF_RANGE, arg, MIN_CANVAS_SIZE, MAX_CANVAS_SIZE);
+		}
+		int localWidth = Integer.parseInt(arguments[0]);
+		int localHeight = Integer.parseInt(arguments[1]);
+		init(localWidth, localHeight);
+
 	}
 	
-	public int getWidth() {
-		return width;
-	}
+	private void init(int width, int height) {
+		
+		Utils.validateCoordinate(width, MIN_CANVAS_SIZE, MAX_CANVAS_SIZE, "width");
+		Utils.validateCoordinate(height, MIN_CANVAS_SIZE, MAX_CANVAS_SIZE, "height");
 
-	public void setWidth(int width) {
-		Validate.isTrue(width > 0, "width should be greater than 0.");
 		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		Validate.isTrue(height > 0, "height should be greater than 0.");
 		this.height = height;
 	}
-
 	/* (non-Javadoc)
-	 * @see io.drawing.command.Command#execute(CommandContext)
+	 * @see io.drawing.command.RenderingCommand#doExecution(io.drawing.shape.Canvas)
 	 */
 	@Override
-	public boolean execute(CommandContext context) {
-		
-		boolean result = true;
-		try {
-			int width = Integer.parseInt((String)context.getArgument(WIDTH));
-			int height = Integer.parseInt((String)context.getArgument(HEIGHT));
-			Canvas canvas = new Canvas(width, height);
-			context.setCanvas(canvas);
-		}catch (Exception ex) {
-			result = false;
-		}
-		return result;
+	protected void doExecution() throws CommandExecutionException {
+		Canvas canvas = new Canvas(width, height);
+		context.setCanvas(canvas);
 	}
 
 }

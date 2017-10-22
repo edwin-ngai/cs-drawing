@@ -3,7 +3,6 @@
  */
 package io.drawing.shape;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 import org.apache.commons.lang3.Validate;
@@ -15,103 +14,84 @@ import org.apache.commons.lang3.Validate;
 public class Rectangle implements Shape {
 
 	private Point upperLeft;
-	private int width, height;
+	private Point lowerRight;
+	private int width;
+	private int height;
 	private Point[] path = null;
 	
-	public Rectangle(Point upperLeft, int width, int height) {
+	public Rectangle(Point upperLeft, Point lowerRight) {
 		
-		this.setUpperLeft(upperLeft);
-		this.setWidth(width);
-		this.setHeight(height);
-		
-		//init path array following clockwise direction
-		path = new Point[(width+height)*2];
-		int startX = upperLeft.getX();
-		int startY = upperLeft.getY();
-		int pathIndex = 0;
-		for (int i=0; i<width; i++, pathIndex++) {
-			path[pathIndex] = new Point(startX+i, startY);
+		Objects.requireNonNull(upperLeft);
+		Objects.requireNonNull(lowerRight);
+		int upperLeftX = upperLeft.getX();
+		int upperLeftY = upperLeft.getY();
+		int lowerRightX = lowerRight.getX();
+		int lowerRightY = lowerRight.getY();
+		Validate.isTrue(upperLeftX<lowerRightX, 
+				"X coordinate of upperLeft should be less than of lowerRight but where %d and %d", upperLeftX, lowerRightX);
+		Validate.isTrue(upperLeftY<lowerRightY,
+				"Y coordinate of upperLeft should be less than of lowerRight but where %d and %d", upperLeftY, lowerRightY);
+		this.width = lowerRightX - upperLeftX + 1;
+		this.height = lowerRightY - upperLeftY + 1;
+		this.path = new Point[(width+height)*2-4];
+		int pathIndex = 0;	
+		for (int i=upperLeftX; i<=lowerRightX; i++) {
+			path[pathIndex++] = new Point(i, upperLeftY);
+		}
+		for (int i=upperLeftY+1; i<=lowerRightY; i++) {
+			path[pathIndex++] = new Point(lowerRightX, i);
+		}
+		for (int i=lowerRightX-1; i>=upperLeftX; i--) {
+			path[pathIndex++] = new Point(i, lowerRightY);
+		}
+		for (int i=lowerRightY-1; i>upperLeftY; i--) {
+			path[pathIndex++] = new Point(upperLeftX, i);
 		}
 		
-		startX += width;
-		for (int i=0; i<height; i++, pathIndex++) {
-			path[pathIndex] = new Point(startX, startY+i);
-		}
-		
-		startY += height;
-		for (int i=0; i<width; i++, pathIndex++) {
-			path[pathIndex] = new Point(startX-i, startY);
-		}
-		
-		startX -= width;
-		for (int i=0; i<height; i++, pathIndex++) {
-			path[pathIndex] = new Point(startX, startY-i);
-		}
+		this.upperLeft = this.path[0];
+		this.lowerRight = this.path[width+height-2];
+
 	}
 
 	public Point getUpperLeft() {
 		return upperLeft;
 	}
 
-	private void setUpperLeft(Point upperLeft) {
-		Objects.requireNonNull(upperLeft, "upperLeft point should not be null.");
-		this.upperLeft = upperLeft;
+	
+	public Point getLowerRight() {
+		return lowerRight;
 	}
 
 	public int getWidth() {
 		return width;
 	}
 
-	private void setWidth(int width) {
-		Validate.isTrue(width > 0, "width should be greater than 0 but was %d", width);
-		this.width = width;
-	}
 
 	public int getHeight() {
 		return height;
 	}
 
-	private void setHeight(int height) {
-		Validate.isTrue(height > 0, "height should be greater than 0 but was %d", height);
-		this.height = height;
-	}
-
-	/* (non-Javadoc)
-	 * @see io.drawing.shape.Shape#contains(io.drawing.shape.Point)
-	 */
-//	@Override
-//	public boolean contains(Point p) {
-//
-//		int x0 = upperLeft.getX();
-//        int y0 = upperLeft.getY();
-//        int x = p.getX();
-//        int y = p.getY();
-//        return (x >= x0 &&
-//                y >= y0 &&
-//                x < x0 + getWidth() &&
-//                y < y0 + getHeight());
-//	}
-
+	
 	/* (non-Javadoc)
 	 * @see io.drawing.shape.Shape#getPath()
 	 */
 	@Override
 	public Point[] getPath() {
-		// TODO Auto-generated method stub
 		return path;
 	}
 
+
 	@Override
 	public String toString() {
-		return "Rectangle [upperLeft=" + upperLeft + ", width=" + width + ", height=" + height + "]";
+		return "Rectangle [upperLeft=" + upperLeft + ", lowerRight=" + lowerRight + ", width=" + width + ", height="
+				+ height + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + height;
-		result = prime * result + Arrays.hashCode(path);
+		result = prime * result + ((lowerRight == null) ? 0 : lowerRight.hashCode());
 		result = prime * result + ((upperLeft == null) ? 0 : upperLeft.hashCode());
 		return result;
 	}
@@ -125,9 +105,10 @@ public class Rectangle implements Shape {
 		if (getClass() != obj.getClass())
 			return false;
 		Rectangle other = (Rectangle) obj;
-		if (height != other.height)
-			return false;
-		if (!Arrays.equals(path, other.path))
+		if (lowerRight == null) {
+			if (other.lowerRight != null)
+				return false;
+		} else if (!lowerRight.equals(other.lowerRight))
 			return false;
 		if (upperLeft == null) {
 			if (other.upperLeft != null)
@@ -136,7 +117,7 @@ public class Rectangle implements Shape {
 			return false;
 		return true;
 	}
-	
-	
 
+
+	
 }

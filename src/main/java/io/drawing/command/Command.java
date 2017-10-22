@@ -9,5 +9,5 @@ package io.drawing.command;
  */
 public interface Command {
 
-	public boolean execute(CommandContext context);
+	public void execute() throws CommandExecutionException;
 }

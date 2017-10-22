@@ -15,28 +15,20 @@ public class HorizontalLine extends Line {
 
 	public HorizontalLine(Point start, Point end) {
 		super(start, end);
-		Validate.isTrue(start.getY()==end.getY(), "Y coordinates of start and end point should be same but were %d and %d.", start.getY(), end.getY());
+		Validate.isTrue(start.getY()==end.getY(), 
+				"Y coordinates of start and end point should be same but were %d and %d.", start.getY(), end.getY());
+		Validate.isTrue(start.getX() < end.getX(), 
+				"X coordinate of start point should be less than of end point, but were %d and %d", start.getX(), end.getX());
 		int startX = start.getX();
 		int endX = end.getX();
 		int y = start.getY();
 		//line segment includes both start and end point, so that the path length should be endX-startX+1
-		int direction = endX>startX?1:-1;
-		int distance = (endX-startX)*direction+1;
-		path = new Point[distance];
+		path = new Point[(endX-startX)+1];
 		for (int i=0; i<path.length; i++) {
-			path[i] = new Point(startX+i*direction, y);
+			path[i] = new Point(startX+i, y);
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see io.drawing.shape.Shape#contains(io.drawing.shape.Point)
-	 */
-//	@Override
-//	public boolean contains(Point point) {
-//		
-//		Objects.requireNonNull(point);
-//		return point.getY() == this.getStart().getY();
-//	}
 
 	/* (non-Javadoc)
 	 * @see io.drawing.shape.Shape#getPath()
@@ -46,13 +38,4 @@ public class HorizontalLine extends Line {
 		return path;
 	}
 	
-	
-	public static boolean isHorizontal(Point start, Point end) {
-		
-		boolean result = false;
-		if (start!=null && end!=null) {
-			result = (start.getY()==end.getY());
-		}
-		return result;
-	}
 }

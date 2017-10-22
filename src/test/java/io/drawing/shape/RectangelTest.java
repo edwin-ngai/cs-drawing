@@ -25,122 +25,105 @@ public class RectangelTest {
 	public void whenUpperLeftPointIsNullThenExceptionIsThrown() {
 		
 		Random r = new Random();
-		int width = r.nextInt(RANDOM_BOUND)+1;
-		int height = r.nextInt(RANDOM_BOUND)+1;
-		new Rectangle(null, width, height);
+		int x = r.nextInt(RANDOM_BOUND);
+		int y = r.nextInt(RANDOM_BOUND);		
+		new Rectangle(null, new Point(x, y));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void whenWidthIsNegativeThenExceptionIsThrown() {
+	@Test(expected = NullPointerException.class)
+	public void whenLowerRightPointIsNullThenExceptionIsThrown() {
 		
 		Random r = new Random();
 		int x = r.nextInt(RANDOM_BOUND);
-		int y = r.nextInt(RANDOM_BOUND);
-		int width = (r.nextInt(RANDOM_BOUND)+1)*-1;
-		int height = r.nextInt(RANDOM_BOUND)+1;
-		new Rectangle(new Point(x,y), width, height);
+		int y = r.nextInt(RANDOM_BOUND);		
+		new Rectangle(new Point(x, y), null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void whenWidthIsZeroThenExceptionIsThrown() {
-
+	public void whenLowerRightIsNotRightToUpperLeftThenExceptionIsThrown() {
+		
 		Random r = new Random();
-		int x = r.nextInt(RANDOM_BOUND);
-		int y = r.nextInt(RANDOM_BOUND);
-		int height = r.nextInt(RANDOM_BOUND)+1;
-		new Rectangle(new Point(x,y), 0, height);
+		int lx = r.nextInt(RANDOM_BOUND);
+		int ly = r.nextInt(RANDOM_BOUND);
+		int rx = lx - r.nextInt(lx);
+		int ry = ly + r.nextInt(RANDOM_BOUND);
+		logger.info("upperLeft point: ({}, {}), lowerRight point: ({}, {})", lx, ly, rx, ry);
+		new Rectangle(new Point(lx,ly), new Point(rx,ry));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void whenHeightIsNegativeThenExceptionIsThrown() {
-
+	public void whenLowerRightIsNotLowerThanUpperLeftThenExceptionIsThrown() {
+		
 		Random r = new Random();
-		int x = r.nextInt(RANDOM_BOUND);
-		int y = r.nextInt(RANDOM_BOUND);
-		int width = r.nextInt(RANDOM_BOUND)+1;
-		int height = (r.nextInt(RANDOM_BOUND)+1)*-1;
-		new Rectangle(new Point(x,y), width, height);
+		int lx = r.nextInt(RANDOM_BOUND);
+		int ly = r.nextInt(RANDOM_BOUND);
+		int rx = lx + r.nextInt(RANDOM_BOUND);
+		int ry = ly - r.nextInt(ly);
+		logger.info("upperLeft point: ({}, {}), lowerRight point: ({}, {})", lx, ly, rx, ry);
+		new Rectangle(new Point(lx,ly), new Point(rx,ry));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void whenHeightIsZeroThenExceptionIsThrown() {
 
-		Random r = new Random();
-		int x = r.nextInt(RANDOM_BOUND);
-		int y = r.nextInt(RANDOM_BOUND);
-		int width = r.nextInt(RANDOM_BOUND)+1;
-		new Rectangle(new Point(x,y), width, 0);
-	}
-	
 	@Test
 	public void whenCorrectArgumentIsProvidedThenInstanceIsCreatedSuccessfully() {
 		
 		Random r = new Random();
-		int x = r.nextInt(RANDOM_BOUND);
-		int y = r.nextInt(RANDOM_BOUND);
-		int width = r.nextInt(RANDOM_BOUND)+1;
-		int height = r.nextInt(RANDOM_BOUND)+1;
-		Rectangle rectangle = new Rectangle(new Point(x,y), width, height);
-		Assert.assertEquals(x, rectangle.getUpperLeft().getX());
-		Assert.assertEquals(y, rectangle.getUpperLeft().getY());
-		Assert.assertEquals(width, rectangle.getWidth());
-		Assert.assertEquals(height, rectangle.getHeight());
+		int lx = r.nextInt(RANDOM_BOUND);
+		int ly = r.nextInt(RANDOM_BOUND);
+		int rx = lx + r.nextInt(RANDOM_BOUND)+1;
+		int ry = ly + r.nextInt(RANDOM_BOUND)+1;
+		Rectangle rectangle = new Rectangle(new Point(lx,ly), new Point(rx, ry));
+		logger.info("rectangle created: [{}]", rectangle);
+
+		Assert.assertEquals(lx, rectangle.getUpperLeft().getX());
+		Assert.assertEquals(ly, rectangle.getUpperLeft().getY());
+		Assert.assertEquals(rx-lx+1, rectangle.getWidth());
+		Assert.assertEquals(ry-ly+1, rectangle.getHeight());
 	}
 	
 	@Test
 	public void whenRectangleIsCreatedThenItsPathCanBeGotten() {
 
 		Random r = new Random();
-		int x = r.nextInt(RANDOM_BOUND);
-		int y = r.nextInt(RANDOM_BOUND);
-		int width = r.nextInt(RANDOM_BOUND)+1;
-		int height = r.nextInt(RANDOM_BOUND)+1;
-		Rectangle rectangle = new Rectangle(new Point(x,y), width, height);
+		int lx = r.nextInt(RANDOM_BOUND);
+		int ly = r.nextInt(RANDOM_BOUND);
+		int rx = lx + r.nextInt(RANDOM_BOUND)+1;
+		int ry = ly + r.nextInt(RANDOM_BOUND)+1;
+		Rectangle rectangle = new Rectangle(new Point(lx,ly), new Point(rx, ry));
 		logger.info("rectangle created: [{}]", rectangle);
 		
 		Point[] path = rectangle.getPath();
 		Assert.assertNotNull(path);
 		
-		int expectedLength = (width+height)*2;
+		int expectedLength = (rectangle.getWidth()+rectangle.getHeight())*2-4;
 		Assert.assertEquals(expectedLength, path.length);
 		
 		int randomIndex = r.nextInt(expectedLength);
 		logger.info("randomIndex: [{}]", randomIndex);
 		Point randomPoint = path[randomIndex];
-		logger.info("randomPoint created: [{}]", randomPoint);
+		logger.info("randomPoint: [{}]", randomPoint);
 		Assert.assertNotNull(randomPoint);
 		
-		int expectedX = x;
-		int expectedY = y;
+		int width = rectangle.getWidth();
+		int height = rectangle.getHeight();
+		int expectedX = lx;
+		int expectedY = ly;
 		if (randomIndex < width) {
-			expectedX = x+randomIndex;
-			expectedY = y;
-		}else if (randomIndex>=width && randomIndex<width+height) {
-			expectedX = x+width;
-			expectedY = y+(randomIndex-width);
-		}else if (randomIndex>=width+height && randomIndex<width*2+height) {
-			expectedX = (x+width)-(randomIndex-width-height);
-			expectedY = y+height;
+			expectedX = lx+randomIndex;
+			expectedY = ly;
+		}else if (randomIndex>=width && randomIndex<width+(height-1)) {
+			expectedX = lx+(width-1);
+			expectedY = ly+(randomIndex-(width-1));
+		}else if (randomIndex>=width+(height-1) && randomIndex<width+(height-1)+(width-1)) {
+			expectedX = (lx+(width-1))-(randomIndex-(width-1)-(height-1));
+			expectedY = ly+(height-1);
 		}else {
-			expectedX = x;
-			expectedY = (y+height) - (randomIndex-width*2-height);
+			expectedX = lx;
+			expectedY = (ly+(height-1)) - (randomIndex-(width-1)-(height-1)-(width-1));
 		}
 		Assert.assertEquals(expectedX, randomPoint.getX());
 		Assert.assertEquals(expectedY, randomPoint.getY());
 	}
-	
-//	@Test
-//	public void loopTest() {
-//		try {
-//			int i = 0;
-//			while (true) {
-//				logger.info("test [{}]", i++);
-//				whenRectangleIsCreatedThenItsPathCanBeGotten();
-//				Thread.sleep(100);
-//			}
-//		}catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-//	}
+
 
 }

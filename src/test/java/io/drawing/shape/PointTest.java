@@ -3,9 +3,7 @@
  */
 package io.drawing.shape;
 
-import static io.drawing.util.Constant.DEFAULT_COLOR;
-
-import static io.drawing.util.TestUtils.*;
+import static io.drawing.util.TestUtils.RANDOM_BOUND;
 
 import java.util.Random;
 
@@ -43,7 +41,7 @@ public class PointTest {
 		int x = r.nextInt(RANDOM_BOUND);
 		int y = r.nextInt(RANDOM_BOUND);
 		Point point = new Point(x, y);
-		Assert.assertEquals(String.valueOf( DEFAULT_COLOR), String.valueOf(point.getColor()));
+		Assert.assertEquals(String.valueOf('x'), String.valueOf(point.getColor()));
 	}
 	
 	@Test

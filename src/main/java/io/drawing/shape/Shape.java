@@ -9,7 +9,5 @@ package io.drawing.shape;
  */
 public interface Shape {
 
-//	public boolean contains(Point point);
-	
 	public Point[] getPath();
 }

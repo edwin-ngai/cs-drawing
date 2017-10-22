@@ -15,30 +15,20 @@ public class VerticalLine extends Line {
 
 	public VerticalLine(Point start, Point end) {
 		super(start, end);
-		Validate.isTrue(start.getX()==end.getX(), 
+		Validate.isTrue(start.getX() == end.getX(), 
 				"X coordinates of start and end point should be same but were %d and %d.", start.getX(), end.getX());
+		Validate.isTrue(start.getY() < end.getY(), 
+				"Y coordinate of start point should be less than of end point, but were %d and %d", start.getY(), end.getY());
 		int startY = start.getY();
 		int endY = end.getY();
 		int x = start.getX();
 		//line segment includes both start and end point, so that the path length should be endX-startX+1
-		int direction = endY>startY?1:-1;
-		int distance = (endY-startY)*direction+1;
-		path = new Point[distance];
+		path = new Point[(endY-startY)+1];
 		for (int i=0; i<path.length; i++) {
-			path[i] = new Point(x, startY+i*direction);
+			path[i] = new Point(x, startY+i);
 		}
 
 	}
-	
-	/* (non-Javadoc)
-	 * @see io.drawing.shape.Shape#contains(io.drawing.shape.Point)
-	 */
-//	@Override
-//	public boolean contains(Point point) {
-//		
-//		Objects.requireNonNull(point);
-//		return point.getX() == this.getStart().getX();
-//	}
 
 	/* (non-Javadoc)
 	 * @see io.drawing.shape.Shape#getPath()
@@ -48,13 +38,4 @@ public class VerticalLine extends Line {
 		return path;
 	}
 
-	
-	public static boolean isVertical(Point start, Point end) {
-		
-		boolean result = false;
-		if (start!=null && end!=null) {
-			result = (start.getX()==end.getX());
-		}
-		return result;
-	}
 }

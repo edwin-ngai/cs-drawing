@@ -5,16 +5,25 @@ package io.drawing.shape;
 
 import java.util.Objects;
 
+import org.apache.commons.lang3.Validate;
+
 /**
  * @author Edwin Ngai (edwin.ngai@mail.con)
  *
  */
 public abstract class Line implements Shape {
 
-	private Point start, end;
+	private Point start;
+	private Point end;
 	
 	public Line(Point start, Point end) {
 		
+		Objects.requireNonNull(start, "start point should not be null.");
+		Objects.requireNonNull(end, "end point should not be null.");
+		Validate.isTrue(start.getX()<=end.getX(), 
+				"X coordinate of start point should not be less than of end point, but were %d and %d", start.getX(), end.getX());
+		this.start = start;
+		this.end = end;
 		this.setStart(start);
 		this.setEnd(end);
 	}
@@ -72,18 +81,5 @@ public abstract class Line implements Shape {
 			return false;
 		return true;
 	}
-
-	
-
-	/* (non-Javadoc)
-	 * @see io.drawing.shape.Shape#contains(io.drawing.shape.Point)
-	 */
-//	@Override
-//	public boolean contains(Point p) {
-//		Objects.requireNonNull(p);
-//		return Line2D.ptSegDistSq(start.getX(), start.getY(), end.getX(), end.getY(), p.getX(), p.getY()) == 0.0;
-//	}
-
-
 
 }

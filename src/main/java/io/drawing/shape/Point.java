@@ -4,7 +4,6 @@
 package io.drawing.shape;
 
 import org.apache.commons.lang3.Validate;
-import static io.drawing.util.Constant.*;
 
 /**
  * A point representing a location in user coordinate system
@@ -13,7 +12,10 @@ import static io.drawing.util.Constant.*;
  */
 public class Point {
 
-	private int x, y;
+	private static final char DEFAULT_COLOR = 'x';
+
+	private int x;
+	private int y;
 	private char color;
 	
 	public Point(int x, int y) {
@@ -73,13 +75,7 @@ public class Point {
 		if (getClass() != obj.getClass())
 			return false;
 		Point other = (Point) obj;
-		if (color != other.color)
-			return false;
-		if (x != other.x)
-			return false;
-		if (y != other.y)
-			return false;
-		return true;
+		return color==other.color && x==other.x && y==other.y;
 	}
 
 	@Override
