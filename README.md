@@ -20,6 +20,7 @@ This is a simple console version of a drawing program. However, the requirement 
 * Shape extensibility: easy to support more shapes
 * Command extensibility: easy to support more commands
 * Rendering extensibility: easy to support other renderer rather than just console
+
 The io.drawing.shape package is designed to support shape extensibility. Below is its class diagram
 **************************Class Diagram (io.drawing.shape)*****************************************
                                                 |---------HorizontalLine
