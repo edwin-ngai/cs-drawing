@@ -1,7 +1,29 @@
 # cs-drawing
-1. HOW TO RUN
+1. ****HOW TO RUN****
 
-2. DEPENDENCIES
+IMPORTANT: The program using Java8. Please make sure Java8 has been installed in your environment.
+
+Windows: (assume current folder name is "drawing")
+1. gradlew distzip
+   above command will build the program, and generate a zip file in ./build/distribution/, which containing a running script.
+2. unzip build\distributions\drawing.zip
+   unzip the file to where you prefe, above command will unzip the file in current folder.
+3. drawing\bin\drawing.bat
+   run the batch file.
+
+
+*nix systems: (assume current folder name is "drawing")
+1. ./gradle distzip
+   above command will build the program, and generate a zip file in ./build/distribution/, which containing a running script.
+2. unzip build\distributions\drawing.zip
+   unzip the file to where you prefe, above command will unzip the file in current folder.
+3. ./drawing/bin/drawing
+   run the batch file
+   
+ This program contains a gradle executable, so that you can use it to run various gradle tasks. For example, using "gradlew test" in Windows, or "./gradle test" in *nix to run test cases and check the test reports in "build/reports/tests"
+
+
+2. ****DEPENDENCIES****
 This program is built using Gradle, and depends on several external libraries that have been placed in the lib folder. Below are their details of usage and dependency.
 2.1 Utilities library:
 org.apache.commons:commons-lang3:3.5
@@ -14,7 +36,7 @@ junit:junit:4.12
      \--- org.hamcrest:hamcrest-core:1.3
 
 
-3. DESIGN CONSIDERATION
+3. ****DESIGN CONSIDERATION****
 3.1 Extensibility
 This is a simple console version of a drawing program. However, the requirement mentions extensibility, which is the most important design consideration of this implementation. Especially, the design considers extensibility in below areas:
 * Shape extensibility: easy to support more shapes
