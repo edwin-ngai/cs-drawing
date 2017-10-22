@@ -1,7 +1,7 @@
 # cs-drawing
-1. How to run
+1. HOW TO RUN
 
-2. Dependencies
+2. DEPENDENCIES
 This program is built using Gradle, and depends on several external libraries that have been placed in the lib folder. Below are their details of usage and dependency.
 2.1 Utilities library:
 org.apache.commons:commons-lang3:3.5
@@ -13,7 +13,8 @@ ch.qos.logback:logback-classic:1.1.11
 junit:junit:4.12
      \--- org.hamcrest:hamcrest-core:1.3
 
-3. Design Consideration
+
+3. DESIGN CONSIDERATION
 3.1 Extensibility
 This is a simple console version of a drawing program. However, the requirement mentions extensibility, which is the most important design consideration of this implementation. Especially, the design considers extensibility in below areas:
 * Shape extensibility: easy to support more shapes
@@ -21,28 +22,28 @@ This is a simple console version of a drawing program. However, the requirement 
 * Rendering extensibility: easy to support other renderer rather than just console
 The io.drawing.shape package is designed to support shape extensibility. Below is its class diagram
 **************************Class Diagram (io.drawing.shape)*****************************************
-												|---------HorizontalLine
-												|
-								 |----Line<|----|
-								 |              |
- Canvas------>Shape <|-----------|              |----------VerticalLine
-	|			  |              |
-	|			  |              |----Rectangle
-	|			  |
-	|			  V				 
-	|---------->Point
+                                                |---------HorizontalLine
+                                                |
+                                |----Line<|-----| 
+                                |               |
+ Canvas------------->Shape <|---|               |----------VerticalLine
+        |               |       |
+        |               |	|----Rectangle
+        |               |
+        |		V				 
+        |----------->Point
 ******************************************************************************************************
 
 The io.drawing.command package is designed to support command extensibility. Below is its class diagram
 **************************Class Diagram (io.drawing.command)*****************************************
  CommandContext  
-	|							     |----CreateCanvas				
-	|							     |				
-	|		|---Quit				 |----DrawLine
-	V		|					     |              
- Command<|--|---RenderingCommand <|--|----DrawRectangle
-				                     |
-				                     |----BucketFill
+        |       |---Help                |----CreateCanvas				
+        |       |                       |				
+        |       |---Quit                |----DrawLine
+        v       |                       |              
+ Command<|------|---RenderingCommand<|--|----DrawRectangle
+                                        |
+                                        |----BucketFill
 ******************************************************************************************************			
 
 The io.drawing.renderer package is design to support rendering extensibility. Below is its class diagram
