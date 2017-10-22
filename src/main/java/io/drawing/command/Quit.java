@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 public class Quit implements Command {
 
-	private static final String QUIT_MSG = "The program will exit.";
+	private static final String QUIT_MSG = "The program will exit.\n";
 	
 	private CommandContext context = null;
 	

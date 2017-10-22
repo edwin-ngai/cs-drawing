@@ -4,19 +4,18 @@ mainClassName = 'io.drawing.Application'
 
 repositories {
 
-	mavenLocal()
-	mavenCentral()
+	flatDir {
+       dirs 'lib'
+    }
+	//mavenCentral()
 }
 
 dependencies {
 	
 	compile 'org.apache.commons:commons-lang3:3.5'
 	compile 'ch.qos.logback:logback-classic:1.1.11'
-//	compile 'org.slf4j:slf4j-log4j12:1.7.25'
-//	compile 'org.slf4j:log4j-over-slf4j:1.7.25'
-	// Use JUnit test framework
+	compile 'ch.qos.logback:logback-core:1.1.11'
+	compile 'org.slf4j:slf4j-api:1.7.22'
 	testImplementation 'junit:junit:4.12'
-//	testImplementation 'org.springframework:spring-test:4.3.10.RELEASE'
-	
-
+	testImplementation 'org.hamcrest:hamcrest-core:1.3'
 }
